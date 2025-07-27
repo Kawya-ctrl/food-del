@@ -26,27 +26,6 @@ const Orders = ({ url }) => {
     }
   };
 
- const statusHandler = async (event, orderId) => {
-  try {
-    const response = await axios.put(url + "/api/order/status", {
-      orderId,
-      status: event.target.value,
-    });
-
-    if (response.data.success) {
-      await fetchOrders();
-      toast.success("Order status updated");
-    } else {
-      toast.error("Failed to update status");
-    }
-  } catch (error) {
-    console.error("Status update error:", error);
-    toast.error("Error updating order status");
-  }
-};
-
-
-
   useEffect(() => {
     fetchOrders();
   }, []);
@@ -86,7 +65,7 @@ const Orders = ({ url }) => {
             <div className="order-item-right">
               <div>Items: {order.items.length}</div>
               <div>Total: ₹{order.amount}</div>
-              <select onChange={(event)=>statusHandler(event,order._id)} defaultValue={order.status || "Food Processing"}>
+              <select defaultValue={order.status || "Food Processing"}>
                 <option value="Food Processing">Food Processing</option>
                 <option value="Out for delivery">Out for delivery</option>
                 <option value="Delivered">Delivered</option>

@@ -9,25 +9,44 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Place order and create Stripe checkout session
 const placeOrder = async (req, res) => {
-  const frontend_url = "http://localhost:5174";
+  const frontend_url = "http://localhost:5173";
 
   try {
     const userId = req.userId;
-    const { items, amount, address } = req.body;
+    const { items, amount, address, paymentMethod } = req.body;
 
-    if (!items || !amount || !address || !Array.isArray(items)) {
+    if (!items || !amount || !address || !Array.isArray(items) || !paymentMethod) {
       return res.status(400).json({ success: false, message: "Invalid order data" });
     }
 
     // Log incoming order for debugging
     console.log("Received order:", req.body);
 
-    // Create new order in DB
+    // If payment method is COD, save order and return success
+    if (paymentMethod === "COD") {
+      const newOrder = new orderModel({
+        userId,
+        items,
+        amount,
+        address,
+        payment: false,
+        status: "Food Processing",
+        paymentMethod: "COD",
+      });
+      await newOrder.save();
+      await userModel.findByIdAndUpdate(userId, { cartData: {} });
+      return res.json({ success: true, cod: true, message: "Order placed with Cash on Delivery" });
+    }
+
+    // Otherwise, proceed with Stripe
     const newOrder = new orderModel({
       userId,
       items,
       amount,
       address,
+      payment: false,
+      status: "Food Processing",
+      paymentMethod: "Stripe",
     });
 
     await newOrder.save();
