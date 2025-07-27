@@ -1,0 +1,78 @@
+/* Order item card layout */
+.order-item {
+    display: grid;
+    grid-template-columns: 60px 1.5fr 1fr;
+    align-items: flex-start;
+    gap: 30px;
+    border: 1px solid tomato;
+    border-radius: 10px;
+    padding: 24px 32px;
+    margin: 32px 0;
+    font-size: 15px;
+    color: #505050;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+/* Food and name bold */
+.order-item-food, .order-item-name {
+    font-weight: 600;
+}
+/* Name margin */
+.order-item-name {
+    margin-top: 18px;
+    margin-bottom: 6px;
+    font-size: 16px;
+}
+/* Address margin */
+.order-item-address {
+    margin-bottom: 10px;
+    color: #888;
+    font-size: 14px;
+}
+/* Status dropdown styling */
+.order-item select {
+    background-color: #ffe8e4;
+    border: 1px solid tomato;
+    border-radius: 6px;
+    width: 160px;
+    padding: 7px 12px;
+    font-size: 15px;
+    outline: none;
+    margin-top: 12px;
+}
+/* Right section for items, total, status */
+.order-item-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 100%;
+    gap: 10px;
+}
+
+.order-item img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    margin-top: 8px;
+}
+@media (max-width: 1000px) {
+    .order-item {
+        font-size: 12px;
+        grid-template-columns: 40px 1fr;
+        padding: 12px 6px;
+        gap: 12px;
+    }
+    .order-item select {
+        padding: 5px;
+        font-size: 12px;
+        width: 100px;
+    }
+    .order-item img {
+        width: 32px;
+        height: 32px;
+    }
+    .order-item-right {
+        align-items: flex-start;
+    }
+}
