@@ -10,6 +10,7 @@ const authMiddleware = async (req, res, next) => {
     const token = authHeader.split(" ")[1];
 
     try {
+        console.log("JWT_SECRET in use:", process.env.JWT_SECRET); 
         const decoded = jwt.verify(token, process.env.JWT_SECRET); // ✅ Fixed variable name
         req.userId = decoded.id; // ✅ Use 'decoded', not 'token_decode'
         next();

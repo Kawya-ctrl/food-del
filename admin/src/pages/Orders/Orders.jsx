@@ -7,7 +7,7 @@ import { assets } from '../../assets/assets';
 const Orders = ({ url }) => {
   const [orders, setOrders] = useState([]);
 
-  const fetchOrders = async () => {
+  const fetchAllOrders = async () => {
     try {
       const response = await axios.get(`${url}/api/order/list`, {
         headers: {
@@ -26,8 +26,17 @@ const Orders = ({ url }) => {
     }
   };
 
+  const statusHandler = async (event,orderId) => {
+    const response = await axios.post(`${url}/api/order/status`, {
+      orderId: orderId,status:event.target.value
+    })
+    if(response.data.success){
+      await fetchAllOrders();
+    }
+  }
+
   useEffect(() => {
-    fetchOrders();
+    fetchAllOrders();
   }, []);
 
   return (
@@ -65,7 +74,7 @@ const Orders = ({ url }) => {
             <div className="order-item-right">
               <div>Items: {order.items.length}</div>
               <div>Total: ₹{order.amount}</div>
-              <select defaultValue={order.status || "Food Processing"}>
+              <select onChange={(event)=>statusHandler(event,order._id)} value={order.status}>
                 <option value="Food Processing">Food Processing</option>
                 <option value="Out for delivery">Out for delivery</option>
                 <option value="Delivered">Delivered</option>

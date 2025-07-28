@@ -25,73 +25,73 @@ const PlaceOrder = () => {
     setData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
 
-    if (!token) {
-      alert("Please log in to place an order");
-      return;
-    }
-
-    const items = food_list
-      .filter(item => cartItems[item._id] > 0)
-      .map(item => ({
-        ...item,
-        quantity: cartItems[item._id]
-      }));
-
-    const address = { ...data };
-    const amount = getTotalCartAmount() + 2;
-
-    try {
-      const response = await axios.post(
-        `${url}/api/order/place`,
-        { items, amount, address },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-
-      if (response.data.success) {
-        window.location.replace(response.data.session_url);
-      } else {
-        alert("Order failed to process.");
-      }
-    } catch (error) {
-      console.error("Order error:", error);
-      alert("Error placing order.");
-    }
-  };
-
-  // const placeOrder = async(event) => {
-  //   event.preventDefault();
-  //   let orderItems = [];
-  //   food_list.map((item)=>{
-  //     if(cartItems[item._id]>0){
-  //       let itemInfo =item;
-  //       itemInfo.quantity = cartItems[item._id];
-  //       orderItems.push(itemInfo);
-  //     }
-  //   })
-  //   let orderData = {
-  //     address:data,
-  //     items:orderItems,
-  //     amount:getTotalCartAmount() + 2,
+  //   if (!token) {
+  //     alert("Please log in to place an order");
+  //     return;
   //   }
-  //   let response = await axios.post(url+"/api/order/place", orderData,{headers: {
+
+  //   const items = food_list
+  //     .filter(item => cartItems[item._id] > 0)
+  //     .map(item => ({
+  //       ...item,
+  //       quantity: cartItems[item._id]
+  //     }));
+
+  //   const address = { ...data };
+  //   const amount = getTotalCartAmount() + 2;
+
+  //   try {
+  //     const response = await axios.post(
+  //       `${url}/api/order/place`,
+  //       { items, amount, address },
+  //       {
+  //         headers: {
   //           Authorization: `Bearer ${token}`
-  //         }})
-  //   if(response.data.success){
-  //     const {session_url} = response.data;
-  //     window.location.replace(session_url);
-  //   }
-  //   else{
-  //     alert("Order failed to process.");
-  //   }
+  //         }
+  //       }
+  //     );
 
-  // }
+  //     if (response.data.success) {
+  //       window.location.replace(response.data.session_url);
+  //     } else {
+  //       alert("Order failed to process.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Order error:", error);
+  //     alert("Error placing order.");
+  //   }
+  // };
+
+  const placeOrder = async(event) => {
+    event.preventDefault();
+    let orderItems = [];
+    food_list.map((item)=>{
+      if(cartItems[item._id]>0){
+        let itemInfo =item;
+        itemInfo.quantity = cartItems[item._id];
+        orderItems.push(itemInfo);
+      }
+    })
+    let orderData = {
+      address:data,
+      items:orderItems,
+      amount:getTotalCartAmount() + 2,
+    }
+    let response = await axios.post(url+"/api/order/place", orderData,{headers: {
+            Authorization: `Bearer ${token}`
+          }})
+    if(response.data.success){
+      const {session_url} = response.data;
+      window.location.replace(session_url);
+    }
+    else{
+      alert("Order failed to process.");
+    }
+
+  }
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -106,7 +106,7 @@ const PlaceOrder = () => {
 
 
   return (
-    <form onSubmit={handleSubmit} className="place-order" >
+    <form onSubmit={placeOrder} className="place-order" >
       <div className="place-order-left">
         <p className="title">Delivery Information</p>
         <div className="multi-fields">
